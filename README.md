@@ -10,8 +10,9 @@ with two depthwise-separable SSDLite heads, 2 anchors per cell (128 anchors tota
 and no NMS — the deployment target assumes at most one hand per frame.
 
 The repository contains the training package, the four original experiment
-notebooks, released checkpoints and INT8 `.espdl` models, the paper source and
-figures, and the measured results. It is the artifact companion to:
+notebooks, released checkpoints and INT8 `.espdl` models, a complete JTAG
+reference firmware, the paper source and figures, and the measured results. It
+is the artifact companion to:
 
 > **Deploying Lightweight Vision Models on the ESP32-S3: A Case Study in the
 > ESP-DL Inference Pipeline**
@@ -75,14 +76,16 @@ scripts/                 train.py, export_onnx.py, demo.py
 notebooks/               four original Colab notebooks, with outputs (provenance)
 models/                  released checkpoints, ONNX, ESP-DL .espdl, SHA256SUMS
 results/                 figures, metrics JSON, bootstrap summary, LaTeX tables
+firmware/jtag/           ESP-IDF USB-Serial-JTAG reference app + host benchmark
 docs/                    paper source + PDF, architecture/deployment/versions/results/references
 tests/                   fast model/ONNX parity tests (no dataset download)
 ```
 
-**Not included:** the HaGRID images, the MediaPipe hand-landmarker task file, the
-ESP-PPQ/ESP-IDF toolchains, and the TinyGesture firmware application. The training
-code downloads HaGRID and MediaPipe on first use; the `.espdl` models are included
-so you do not need ESP-PPQ to inspect or deploy the released artifacts.
+**Not included:** the HaGRID images, the MediaPipe hand-landmarker task file, and
+the ESP-PPQ/ESP-IDF toolchains. The training code downloads HaGRID and MediaPipe
+on first use; the `.espdl` models are included so you do not need ESP-PPQ to
+inspect or deploy the released artifacts. The firmware source is included but
+is not compiled by the Python test suite.
 
 The four notebooks are preserved as they were run, including their outputs and
 some Colab-specific paths. They are useful for provenance and for the KD/QAT
@@ -234,14 +237,20 @@ each notebook and model folder to the variant it produced.
 ## Deployment notes
 
 The released `.espdl` files are ESP-DL 3.3.2 models quantized with ESP-PPQ for
-`esp32s3` at 8 bits. They are static-shape, batch-1 models. A minimal ESP-DL
-integration looks like:
+`esp32s3` at 8 bits. They are static-shape, batch-1 models. The complete
+USB-Serial-JTAG reference application is in
+[`firmware/jtag/`](firmware/jtag/README.md): it embeds the PTQ-INT8 student,
+reads a 128×128 RGB frame over native USB, and reports the class plus separate
+device-inference and transfer times. It is the source used for the paper's
+protocol measurements.
+
+A minimal ESP-DL integration looks like:
 
 ```cpp
-// The .espdl file is embedded as a binary blob (idf_component_register EMBED_FILES).
-extern const uint8_t gesture_ssdlite_espdl[] asm("_binary_gesture_ssdlite_espdl_start");
-dl::Model model(reinterpret_cast<const char *>(gesture_ssdlite_espdl), fbs::MODEL_LOCATION_IN_FLASH_RODATA);
-model.minimize();  // optional: keep the graph in PSRAM on the S3
+// main/CMakeLists.txt: target_add_binary_data(... "gesture_ssdlite_no_test.espdl" BINARY)
+extern const uint8_t model_data_start[] asm("_binary_gesture_ssdlite_no_test_espdl_start");
+dl::Model model(reinterpret_cast<const char *>(model_data_start), fbs::MODEL_LOCATION_IN_FLASH_RODATA);
+model.minimize();  // optional: release intermediate runtime buffers
 
 // Input: 128x128 RGB uint8, scaled as [0,1]*128 and clipped to int8.
 // Output: cls_logits [1,128,7] and loc_preds [1,128,4].
@@ -251,10 +260,9 @@ Use the same class order as training:
 `fist`, `palm`, `like`, `ok`, `peace`, `point`. The first classification channel
 is background. The paper's on-device measurement is 94 ms at width 0.30 and
 469 ms at width 1.0, measured with `esp_timer` around `model.run()` and excluding
-image transfer. The firmware application itself is not part of this repository;
-the `.espdl` and the export/quantization steps are. See
-[`docs/deployment.md`](docs/deployment.md) for the full preprocessing/quantization
-recipe.
+image transfer. See [`firmware/jtag/README.md`](firmware/jtag/README.md) for the
+build, wiring and USB protocol, and [`docs/deployment.md`](docs/deployment.md)
+for the full preprocessing/quantization recipe.
 
 ---
 
@@ -303,7 +311,7 @@ and PDF are in [`docs/paper/`](docs/paper/).
 
 ## License
 
-- **Code** (`tinygesturessd/`, `scripts/`, `tests/`): [MIT](LICENSE).
+- **Code** (`tinygesturessd/`, `scripts/`, `tests/`, `firmware/`): [MIT](LICENSE).
 - **Documentation, paper source, figures, results and released model weights/metadata**:
   [CC BY-NC-SA 4.0](LICENSE-DOCS). The weights are shared for research and
   non-commercial use; contact the authors for other terms.

@@ -73,11 +73,19 @@ QAT exports omit test tensors, so their sizes are directly comparable to the
 
 ## Firmware and hardware
 
-No TinyGesture firmware application is included in this repository. The paper's
-latency measurements (94 ms at width 0.30, 469 ms at width 1.0) were taken on an
-ESP32-S3 with a USB-Serial-JTAG harness that uploads a pre-quantized INT8 image
-and parses the model output. The deployable artifact is the `.espdl` file; the
-integration contract is documented in [`deployment.md`](deployment.md).
+The public repository now includes the USB-Serial-JTAG reference application in
+[`../firmware/jtag/`](../firmware/jtag/README.md). It embeds
+`models/kd/gesture_ssdlite_no_test.espdl` (PTQ, 183.33 KB) and implements the
+protocol used for the paper's latency measurements (94 ms at width 0.30, 469 ms
+at width 1.0): `READY`, a `0xAA`-prefixed 49,152-byte INT8 frame, and a
+`CLASS`/`SCORE`/`INFER_US`/`XFER_IN_US` reply.
+
+The firmware was integrated from the supplied `JTAG_gesture_ptq` archive. The
+archive had the PTQ variant source but an empty `models/` directory and a
+generated `sdkconfig`; the public copy links the released no-test PTQ model,
+keeps only `sdkconfig.defaults`, and documents the actual USB transport. The
+project was build-checked with ESP-IDF v6.0 and ESP-DL 3.3.2; the Python test
+suite does not compile it, so on-device timing still needs board validation.
 
 The sibling `AgroStake` repository contains a full ESP-IDF reference application
 (UART, USB-Serial-JTAG and Wi-Fi variants) for a different four-class plant-disease
@@ -104,6 +112,8 @@ author-created documentation/models, not the HaGRID data.
 - `model.param_summary(verbose=False)` returns the parameter count for tests.
 - The ONNX and PyTorch outputs are checked numerically in
   `tests/test_smoke.py`.
+- The supplied JTAG PTQ firmware was added under `firmware/jtag/`, with the
+  released no-test PTQ model linked into the project.
 - No model weights, figures or notebook outputs were altered; only metadata,
   paths and the new public documentation were added.
 

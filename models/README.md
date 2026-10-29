@@ -42,6 +42,12 @@ Metrics: fp32 57.51% accuracy / 69.78% F1; PTQ 56.12 / 67.88; QAT 57.04 /
 69.20. The KD family mean over three seeds is 71.00 ± 1.09 F1. The teacher is
 86.92 / 79.68.
 
+The JTAG reference firmware embeds a byte-identical copy of
+`gesture_ssdlite_no_test.espdl` at
+[`../firmware/jtag/models/gesture_ssdlite_no_test.espdl`](../firmware/jtag/models/gesture_ssdlite_no_test.espdl).
+It is duplicated so the ESP-IDF project is self-contained; both copies have the
+same SHA-256 (`978DFB13…4269E472`).
+
 ### `pretrained/` — width-1.0 ImageNet-pretrained fine-tune
 
 | File | What it is | Size |

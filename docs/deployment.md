@@ -106,13 +106,16 @@ from 232.98 to 183.31 KB at width 0.30.
 
 ## 5. ESP-IDF integration
 
-Add ESP-DL as a managed component and embed the `.espdl` as a binary blob:
+A complete reference project is in [`../firmware/jtag/`](../firmware/jtag/README.md).
+It uses the PTQ export without test tensors and carries the actual USB protocol,
+partition table, PSRAM defaults and host benchmark. Add ESP-DL as a managed
+component and embed the `.espdl` as a binary blob:
 
 ```yaml
 # main/idf_component.yml
 dependencies:
   idf:
-    version: ">=5.0"
+    version: ">=5.4"
   espressif/esp-dl:
     version: "^3.3.2"
 ```
@@ -121,26 +124,45 @@ dependencies:
 # main/CMakeLists.txt
 idf_component_register(
     SRCS "main.cpp"
-    EMBED_FILES "gesture_ssdlite.espdl"
-    PRIV_REQUIRES esp-dl
+    INCLUDE_DIRS "."
+    PRIV_REQUIRES esp-dl esp_driver_usb_serial_jtag esp_timer esp_hw_support heap
 )
+
+set(MODEL_FILE "${CMAKE_SOURCE_DIR}/models/gesture_ssdlite_no_test.espdl")
+target_add_binary_data(${COMPONENT_LIB} "${MODEL_FILE}" BINARY)
 ```
 
 ```cpp
-extern const uint8_t gesture_ssdlite_espdl[] asm("_binary_gesture_ssdlite_espdl_start");
+extern const uint8_t model_data_start[]
+    asm("_binary_gesture_ssdlite_no_test_espdl_start");
 
-dl::Model model(reinterpret_cast<const char *>(gesture_ssdlite_espdl),
+dl::Model model(reinterpret_cast<const char *>(model_data_start),
                 fbs::MODEL_LOCATION_IN_FLASH_RODATA);
-model.minimize();   // optional; keeps the graph in PSRAM on the S3
+model.minimize();   // optional; releases intermediate runtime buffers
 
-// Fill the input tensor with the int8 HWC image, then:
-model.run();
+// Fill the model's input tensor with the int8 HWC image, then:
+model.run(model.get_inputs());
 // cls_logits: [1, 128, 7] int8; loc_preds: [1, 128, 4] int8
 ```
 
 The exact tensor accessor names depend on the ESP-DL version; the released
 models were produced with ESP-DL 3.3.2. The model is static-shape and batch-1,
-so do not reuse it from multiple tasks concurrently without a mutex.
+so do not reuse it from multiple tasks concurrently without a mutex. The
+reference firmware makes a 32-byte-aligned PSRAM copy of the blob before
+constructing the model and uses `MEMORY_MANAGER_GREEDY`; on a board without
+PSRAM, use the flash-rodata path instead.
+
+The reference firmware sends `READY\n` on USB-Serial-JTAG, then accepts
+`0xAA | 49,152 signed INT8 bytes` and replies:
+
+```text
+CLASS:<name> SCORE:<0.000-1.000> INFER_US:<int> XFER_IN_US:<int>
+```
+
+`SCORE` is the softmax probability of the best foreground class at the best of
+the 128 anchors; `CLASS:none` means no anchor cleared 0.5. Boxes are not decoded
+because the target assumes one hand per frame. See the firmware README for the
+host benchmark and wiring.
 
 ## 6. Latency and overhead
 

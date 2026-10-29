@@ -18,6 +18,16 @@ models/training_curves.png
 models/training_summary.json
 models/demo_predictions.png
 
+# ESP-IDF
+firmware/**/build/
+firmware/**/managed_components/
+firmware/**/dependencies.lock
+firmware/**/sdkconfig
+firmware/**/sdkconfig.old
+firmware/**/*.bin
+firmware/**/*.elf
+firmware/**/*.map
+
 # Jupyter / pytest
 .pytest_cache/
 .ipynb_checkpoints/

@@ -10,6 +10,7 @@ top-level README.
 | [`paper/README.md`](paper/README.md) | How to rebuild the PDF and where the figures came from. |
 | [`architecture.md`](architecture.md) | Tensor shapes, backbone truncation, anchors, heads, matching, loss, and post-processing. |
 | [`deployment.md`](deployment.md) | ONNX → ESP-PPQ INT8 → ESP-DL, preprocessing contract, class order, and integration notes. |
+| [`../firmware/jtag/README.md`](../firmware/jtag/README.md) | Build, wiring, USB protocol and host benchmark for the reference firmware. |
 | [`versions.md`](versions.md) | Notebook/model/firmware variant map and provenance. |
 | [`results.md`](results.md) | Full fp32/PTQ/QAT tables, paired bootstrap intervals, width sweep, calibration sensitivity, and latency. |
 | [`references.md`](references.md) | Paper bibliography and links to the external tools/datasets. |
