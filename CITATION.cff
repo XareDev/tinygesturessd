@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this code, models or results, please cite the paper and this repository."
+title: "TinyGestureSSD: Single-scale SSDLite hand-gesture detection for the ESP32-S3"
+abstract: >-
+  Training, export and INT8 quantization pipeline for a six-class single-hand
+  gesture detector on the ESP32-S3, including released PyTorch checkpoints,
+  ONNX graphs and ESP-DL .espdl models.
+authors:
+  - family-names: Harmouni
+    given-names: Youcef
+  - family-names: Bellili
+    given-names: Abdelaziz
+  - family-names: Touzout
+    given-names: Walid
+version: 0.3.0
+date-released: 2026-10-29
+license: MIT
+repository-code: "https://github.com/XareDev/tinygesturessd"
+url: "https://github.com/XareDev/tinygesturessd"
+keywords:
+  - tinyML
+  - ESP32-S3
+  - ESP-DL
+  - SSDLite
+  - gesture detection
+  - knowledge distillation
+  - quantization
+preferred-citation:
+  type: misc
+  title: >-
+    Deploying Lightweight Vision Models on the ESP32-S3: A Case Study in the
+    ESP-DL Inference Pipeline
+  authors:
+    - family-names: Harmouni
+      given-names: Youcef
+    - family-names: Bellili
+      given-names: Abdelaziz
+    - family-names: Touzout
+      given-names: Walid
+  year: 2026
+  note: "Manuscript, Institute of Electrical & Electronic Engineering (IGEE, ex. INELEC)"
+  url: "https://github.com/XareDev/tinygesturessd"

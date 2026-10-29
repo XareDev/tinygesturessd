@@ -1,0 +1,14 @@
+\begin{table}
+\caption{Detection metrics and on-device size across float32, PTQ-INT8, and QAT-INT8 variants of the from-scratch width-0.30 baseline.}
+\label{tab:qat_comparison_baseline}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Size (KB) & Accuracy (%) & Precision (%) & Recall (%) & F1 macro (%) \\
+Model &  &  &  &  &  \\
+\midrule
+Float32 & 446.31 & 18.48 & 42.19 & 18.56 & 25.32 \\
+PTQ-INT8 & 233.03 & 13.86 & 36.89 & 13.98 & 20.13 \\
+QAT-INT8 & 183.36 & 17.32 & 40.04 & 17.42 & 24.22 \\
+\bottomrule
+\end{tabular}
+\end{table}

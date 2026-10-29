@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.venv/
+venv/
+.env
+
+# Downloaded / generated at runtime
+dataset/
+models/hand_landmarker.task
+models/hagrid_pseudo_labeled/
+models/best_model.pt
+models/training_curves.png
+models/training_summary.json
+models/demo_predictions.png
+
+# Jupyter / pytest
+.pytest_cache/
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Logs
+*.log

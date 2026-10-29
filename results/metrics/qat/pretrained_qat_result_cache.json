@@ -1,0 +1,13 @@
+{
+  "best_qat_f1": 0.839410539883637,
+  "best_qat_epoch": 10,
+  "best_qat_metrics": {
+    "accuracy": 0.7505773672055427,
+    "precision": 0.9506763032625103,
+    "recall": 0.7524380583014998,
+    "f1_macro": 0.839410539883637,
+    "n_missed": 91.0,
+    "n_total": 433.0
+  },
+  "size_qat_kb": 643.03125
+}

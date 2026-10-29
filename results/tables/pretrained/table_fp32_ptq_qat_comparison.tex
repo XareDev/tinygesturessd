@@ -1,0 +1,14 @@
+\begin{table}
+\caption{Detection metrics and on-device size across float32, PTQ-INT8, and QAT-INT8 variants (pretrained-backbone notebook).}
+\label{tab:qat_comparison_pretrained}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Size (KB) & Accuracy (%) & Precision (%) & Recall (%) & F1 macro (%) \\
+Model &  &  &  &  &  \\
+\midrule
+Float32 & 2283.50 & 79.68 & 95.73 & 79.82 & 86.92 \\
+PTQ-INT8 & 643.03 & 69.75 & 94.82 & 70.59 & 80.22 \\
+QAT-INT8 & 643.03 & 75.06 & 95.07 & 75.24 & 83.94 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,18 @@
+{
+  "kind": "kd",
+  "width": 0.3,
+  "aug": "aug",
+  "seed": 2,
+  "teacher": "c:\\Users\\xared\\Documents\\30_PROJECTS\\TinyGestureSSD\\TinyGestureSSD\\gesturessd\\models_kd\\teacher_best.pt",
+  "T": 2.0,
+  "alpha": 0.5,
+  "beta": 0.5,
+  "best_epoch": 100,
+  "fp32": {
+    "accuracy": 0.5981524249422633,
+    "precision": 0.9085019225081338,
+    "recall": 0.5982711081302631,
+    "f1_macro": 0.7187313882338621
+  },
+  "n_missed": 148
+}

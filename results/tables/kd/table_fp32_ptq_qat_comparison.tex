@@ -1,0 +1,15 @@
+\begin{table}
+\caption{Detection metrics and on-device size across float32, PTQ-INT8, and QAT-INT8 variants of the TinyGestureSSD student.}
+\label{tab:qat_comparison}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Size (KB) & Accuracy (%) & Precision (%) & Recall (%) & F1 macro (%) \\
+Model &  &  &  &  &  \\
+\midrule
+Teacher (fp32) & 2283.50 & 79.68 & 95.73 & 79.82 & 86.92 \\
+Student (fp32) & 446.31 & 57.51 & 90.11 & 57.42 & 69.78 \\
+Student (PTQ-INT8) & 232.98 & 56.12 & 87.66 & 56.04 & 67.88 \\
+Student (QAT-INT8) & 183.31 & 57.04 & 88.95 & 57.00 & 69.20 \\
+\bottomrule
+\end{tabular}
+\end{table}

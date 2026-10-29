@@ -1,0 +1,35 @@
+{
+  "scratch_0.30": {
+    "onnx": "models/gesture_ssdlite.onnx",
+    "size_kb_new": 183.328125,
+    "size_kb_old": 233.03125,
+    "size_kb_qat_existing": 183.359375,
+    "f1_new": 20.12905750453764,
+    "acc_new": 13.856812933025402,
+    "n_missed_new": 273,
+    "f1_paper": 20.13,
+    "acc_paper": 13.86
+  },
+  "kd_0.30": {
+    "onnx": "models_kd/gesture_ssdlite.onnx",
+    "size_kb_new": 183.328125,
+    "size_kb_old": 232.984375,
+    "size_kb_qat_existing": 183.3125,
+    "f1_new": 67.88015277559826,
+    "acc_new": 56.12009237875289,
+    "n_missed_new": 156,
+    "f1_paper": 67.88,
+    "acc_paper": 56.12
+  },
+  "pretrained_1.00": {
+    "onnx": "models_pretrained/gesture_ssdlite.onnx",
+    "size_kb_new": 643.03125,
+    "size_kb_old": 692.703125,
+    "size_kb_qat_existing": 643.03125,
+    "f1_new": 80.21546643666441,
+    "acc_new": 69.7459584295612,
+    "n_missed_new": 113,
+    "f1_paper": 80.8,
+    "acc_paper": 70.44
+  }
+}
